@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bernard Joseph S. Sagon — Web Developer</title>
+    <meta name="description" content="Bernard Joseph S. Sagon — IT student and web developer specializing in HTML, CSS, JavaScript and PHP. Open to internship opportunities.">
+    
+    <!-- Preconnect to Google Fonts for faster font loading -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Load three font families: Space Grotesk (headings), Inter (body), JetBrains Mono (code) -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================================
+           CSS CUSTOM PROPERTIES (Design Tokens)
+           Central variables for the entire design system.
+           Changing values here updates the whole site consistently.
+           ============================================================ */
+        :root {
+            --bg: #FAFAF8;           /* Main page background - warm off-white */
+            --bg-alt: #F1F1ED;       /* Alternate background for cards/sections */
+            --panel: #FFFFFF;        /* Card/panel background - pure white */
+            --ink: #14171A;          /* Primary text color - near black */
+            --ink-soft: #4B5158;     /* Secondary text - muted gray */
+            --line: #E3E2DC;         /* Border color - subtle warm gray */
+            --accent: #3454D1;       /* Primary accent - blue */
+            --accent-soft: #EAEEFC;  /* Light accent background for badges/highlights */
+            --ok: #1F8A57;           /* Success/status green */
+            --radius: 10px;          /* Standard border radius */
+            --maxw: 1120px;          /* Maximum content width */
+            --shadow: 0 1px 2px rgba(20,23,26,0.04), 0 8px 24px rgba(20,23,26,0.05); /* Card shadow */
+        }
+
+        /* ============================================================
+           GLOBAL RESET & BASE STYLES
+           Ensures consistent rendering across all browsers
+           ============================================================ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;  /* Include padding/border in element width */
+        }
+
+        html {
+            scroll-behavior: smooth; /* Enable smooth scrolling for anchor links */
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased; /* Crisper text on macOS */
+        }
+
+        /* Headings use the Space Grotesk display font for visual hierarchy */
+        h1, h2, h3, .display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.01em;  /* Slightly tighter letter spacing for headings */
+            margin: 0;
+        }
+
+        /* Utility class for monospace text (code, tags, dates) */
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* Custom text selection color to match brand accent */
+        ::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ============================================================
+           ACCESSIBILITY: Focus Styles
+           Visible focus ring for keyboard navigation
+           ============================================================ */
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* ============================================================
+           LAYOUT UTILITY
+           Centers content and constrains maximum width
+           ============================================================ */
+        .wrap {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* ============================================================
+           HEADER & NAVIGATION
+           Sticky header with glass-morphism blur effect.
+           Contains the brand logo and navigation links.
+           ============================================================ */
+        header.site {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(250, 250, 248, 0.86);  /* Semi-transparent for glass effect */
+            backdrop-filter: blur(10px);             /* Frosted glass blur */
+            border-bottom: 1px solid var(--line);
+        }
+
+        /* Flexbox navigation bar: brand on left, links on right */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+        }
+
+        /* Brand logo with decorative rotated square */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 17px;
+        }
+
+        .brand .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 2px;
+            background: var(--accent);
+            transform: rotate(45deg);  /* Creates a diamond shape */
+            flex: none;
+        }
+
+        /* Horizontal navigation links */
+        .navlinks {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+            font-size: 14.5px;
+            color: var(--ink-soft);
+        }
+
+        .navlinks a {
+            transition: color 0.15s ease;
+        }
+
+        .navlinks a:hover {
+            color: var(--ink);
+        }
+
+        /* Call-to-action button in navigation (stands out with dark background) */
+        .nav-cta {
+            background: var(--ink);
+            color: #fff !important;
+            padding: 9px 18px;
+            border-radius: 7px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+        }
+
+        /* Mobile hamburger menu button (hidden on desktop) */
+        .menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 6px;
+        }
+
+        /* Three lines of the hamburger icon */
+        .menu-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--ink);
+            margin: 5px 0;
+        }
+
+        /* ============================================================
+           HERO SECTION
+           Two-column layout: text introduction + decorative code panel.
+           The code panel serves as a visual signature element.
+           ============================================================ */
+        .hero {
+            padding: 88px 0 90px;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;  /* Slightly wider left column */
+            gap: 56px;
+            align-items: center;
+        }
+
+        /* Status badge with animated pulse dot indicating availability */
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            color: var(--accent);
+            background: var(--accent-soft);
+            padding: 6px 12px;
+            border-radius: 100px;  /* Pill shape */
+            margin-bottom: 22px;
+        }
+
+        /* Pulsing green dot animation */
+        .eyebrow .pulse {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ok);
+            box-shadow: 0 0 0 0 rgba(31, 138, 87, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        /* Keyframes for the pulse effect: expands and fades a glow ring */
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(31, 138, 87, 0.45);
+            }
+            70% {
+                box-shadow: 0 0 0 6px rgba(31, 138, 87, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(31, 138, 87, 0);
+            }
+        }
+
+        /* Responsive heading using clamp() for fluid sizing */
+        .hero h1 {
+            font-size: clamp(34px, 4.6vw, 54px);
+            line-height: 1.07;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 .accent {
+            color: var(--accent);
+        }
+
+        /* Lead paragraph - slightly larger for readability */
+        .hero p.lede {
+            font-size: 17.5px;
+            color: var(--ink-soft);
+            max-width: 480px;  /* Limit line length for readability */
+            margin-bottom: 30px;
+        }
+
+        /* Call-to-action button group */
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           BUTTON COMPONENTS
+           Reusable button styles with primary and ghost variants
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 22px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14.5px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        /* Primary button: dark background, inverts to accent on hover */
+        .btn-primary {
+            background: var(--ink);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent);
+            transform: translateY(-1px);  /* Subtle lift effect */
+        }
+
+        /* Ghost button: transparent with border, fills on hover */
+        .btn-ghost {
+            background: transparent;
+            border-color: var(--line);
+            color: var(--ink);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--ink);
+        }
+
+        /* ============================================================
+           CODE PANEL (Hero Visual Element)
+           Mimics a code editor window with traffic light dots and
+           syntax-highlighted PHP code. Adds developer personality.
+           ============================================================ */
+        .code-panel {
+            background: #14171A;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px -12px rgba(20, 23, 26, 0.35);
+            transform: rotate(0.4deg);  /* Slight tilt for visual interest */
+        }
+
+        /* Title bar with macOS-style window controls */
+        .code-panel .bar {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 13px 16px;
+            background: #1D2125;
+            border-bottom: 1px solid #2A2F35;
+        }
+
+        /* Red, yellow, green traffic light dots */
+        .code-panel .bar span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .code-panel .bar span:nth-child(1) {
+            background: #FF5F57;
+        }  /* Red - close */
+
+        .code-panel .bar span:nth-child(2) {
+            background: #FEBC2E;
+        }  /* Yellow - minimize */
+
+        .code-panel .bar span:nth-child(3) {
+            background: #28C840;
+        }  /* Green - maximize */
+
+        /* Filename displayed in the title bar */
+        .code-panel .filename {
+            margin-left: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #8A9099;
+        }
+
+        /* Code block styling */
+        .code-panel pre {
+            margin: 0;
+            padding: 24px 22px 28px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.4px;
+            line-height: 1.8;
+            color: #D6DBE1;
+            overflow-x: auto;
+        }
+
+        /* Syntax highlighting tokens (mimics VS Code Dark+ theme) */
+        .tok-kw {
+            color: #C792EA;
+        }    /* Keywords (purple) */
+
+        .tok-fn {
+            color: #82AAFF;
+        }    /* Function names (blue) */
+
+        .tok-str {
+            color: #A3E0A1;
+        }   /* Strings (green) */
+
+        .tok-var {
+            color: #F78C6C;
+        }   /* Variables (orange) */
+
+        .tok-cm {
+            color: #6B7280;
+        }    /* Comments (gray) */
+
+        .tok-prop {
+            color: #89DDFF;
+        }  /* Properties (cyan) */
+
+        /* ============================================================
+           SECTION LAYOUT
+           Consistent vertical rhythm for all content sections
+           ============================================================ */
+        section {
+            padding: 84px 0;
+        }
+
+        /* Section header with monospace tag label */
+        .section-head {
+            margin-bottom: 46px;
+            max-width: 640px;
+        }
+
+        /* File-path style section label (e.g., "// about.md") */
+        .section-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            color: var(--accent);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .section-head h2 {
+            font-size: clamp(26px, 3vw, 34px);
+        }
+
+        .section-head p {
+            color: var(--ink-soft);
+            margin-top: 12px;
+            font-size: 15.5px;
+        }
+
+        /* Horizontal divider between sections */
+        .divider {
+            border: none;
+            border-top: 1px solid var(--line);
+            margin: 0;
+        }
+
+        /* ============================================================
+           ABOUT SECTION
+           Two-column layout: bio text on left, skill stats on right
+           ============================================================ */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+
+        .about-grid p {
+            color: var(--ink-soft);
+            margin-bottom: 16px;
+            font-size: 15.5px;
+        }
+
+        /* 2x2 statistics grid with 1px gap borders */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1px;
+            background: var(--line);  /* Gap color shows through */
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            overflow: hidden;  /* Clips corners for border-radius */
+        }
+
+        .stat {
+            background: var(--panel);
+            padding: 24px 22px;
+        }
+
+        .stat .num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .stat .label {
+            font-size: 13px;
+            color: var(--ink-soft);
+            margin-top: 4px;
+        }
+
+        /* ============================================================
+           SKILLS SECTION
+           Three-column card grid. Each card has an icon, title,
+           description, and technology tags.
+           ============================================================ */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* Skill card with hover lift animation */
+        .skill-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 26px 24px;
+            transition: border-color 0.15s ease, transform 0.15s ease;
+        }
+
+        .skill-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* Monospace icon in accent-colored square */
+        .skill-card .icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .skill-card h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .skill-card .taglist {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        /* Individual technology tag */
+        .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            color: var(--ink-soft);
+            background: var(--bg-alt);
+            border: 1px solid var(--line);
+            padding: 4px 9px;
+            border-radius: 5px;
+        }
+
+        .skill-card p {
+            color: var(--ink-soft);
+            font-size: 13.8px;
+        }
+
+        /* ============================================================
+           PROJECTS SECTION
+           Two-column card grid. Each card links to a live demo.
+           Cards have thumbnail area, description, and tech tags.
+           ============================================================ */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        /* Clickable project link wrapper */
+        .project-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .project-link:hover .project-card {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .project-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Gradient thumbnail area with centered label */
+        .project-thumb {
+            height: 160px;
+            background: linear-gradient(135deg, var(--accent-soft) 0%, var(--bg-alt) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .project-thumb .ph-icon {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--accent);
+            background: var(--panel);
+            border: 1px solid var(--line);
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .project-body {
+            padding: 22px 24px 24px;
+        }
+
+        /* Title and status pill on same row */
+        .project-body .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .project-body h3 {
+            font-size: 17px;
+        }
+
+        /* Status indicator pill */
+        .status-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10.5px;
+            padding: 3px 9px;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        .status-pill.wip {
+            background: #FFF4E0;
+            color: #9A6B00;
+        }  /* Work in progress */
+
+        .status-pill.done {
+            background: #E8F6EE;
+            color: var(--ok);
+        }  /* Completed/live */
+
+        .project-body p {
+            color: var(--ink-soft);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .project-body .taglist {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .project-demo {
+            margin-top: 15px;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           EDUCATION TIMELINE
+           Vertical timeline with accent dots on the left border.
+           Shows educational progression chronologically.
+           ============================================================ */
+        .timeline {
+            border-left: 2px solid var(--line);
+            padding-left: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        /* Timeline dot (positioned absolutely on the border) */
+        .t-item {
+            position: relative;
+        }
+
+        .t-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 4px;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 3px solid var(--bg);
+            box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        .t-item .t-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .t-item h3 {
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .t-item .t-org {
+            color: var(--ink-soft);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .t-item p {
+            color: var(--ink-soft);
+            font-size: 14.5px;
+        }
+
+        /* ============================================================
+           CONTACT SECTION
+           Dark panel with radial gradient glow effects.
+           Centered layout with two CTA buttons.
+           ============================================================ */
+        .contact-panel {
+            background: var(--ink);
+            color: #fff;
+            border-radius: 16px;
+            padding: 64px 56px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative radial gradients for depth */
+        .contact-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 18% 20%, rgba(52, 84, 209, 0.35), transparent 45%),
+                radial-gradient(circle at 82% 80%, rgba(52, 84, 209, 0.25), transparent 45%);
+            pointer-events: none;  /* Allows clicking through the overlay */
+        }
+
+        /* Ensure content stays above the gradient overlay */
+        .contact-panel > * {
+            position: relative;
+        }
+
+        .contact-panel .section-tag {
+            color: #9BB0F2;
+        }
+
+        .contact-panel h2 {
+            font-size: clamp(26px, 3.4vw, 36px);
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .contact-panel p {
+            color: #B7BCC4;
+            max-width: 480px;
+            margin: 0 auto 30px;
+            font-size: 15.5px;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons on dark background */
+        .btn-on-dark {
+            background: #fff;
+            color: var(--ink);
+        }
+
+        .btn-on-dark:hover {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-ghost-dark {
+            border-color: #3A3F46;
+            color: #fff;
+        }
+
+        .btn-ghost-dark:hover {
+            border-color: #fff;
+        }
+
+        /* ============================================================
+           FOOTER
+           Simple centered attribution
+           ============================================================ */
+        footer {
+            padding: 36px 0 50px;
+            text-align: center;
+            color: var(--ink-soft);
+            font-size: 13px;
+        }
+
+        footer .mono {
+            color: var(--ink-soft);
+        }
+
+        /* ============================================================
+           SCROLL REVEAL ANIMATION
+           Elements start invisible and slide up when they enter the viewport.
+           The 'in' class is added by JavaScript via Intersection Observer.
+           ============================================================ */
+        [data-reveal] {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        [data-reveal].in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+           ACCESSIBILITY: Reduced Motion
+           Disables animations for users who prefer reduced motion
+           ============================================================ */
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+
+            [data-reveal] {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+
+            .eyebrow .pulse {
+                animation: none;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE BREAKPOINTS
+           ============================================================ */
+
+        /* Tablet (920px and below) */
+        @media (max-width: 920px) {
+            .hero {
+                grid-template-columns: 1fr;  /* Stack hero content */
+                padding: 56px 0 60px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;  /* Stack about content */
+                gap: 36px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr 1fr;  /* 2-column skills */
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;  /* Single column projects */
+            }
+
+            .contact-panel {
+                padding: 48px 28px;
+            }
+        }
+
+        /* Mobile (680px and below) */
+        @media (max-width: 680px) {
+            /* Mobile navigation: slides down from top */
+            .navlinks {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: var(--bg);
+                border-bottom: 1px solid var(--line);
+                padding: 18px 28px 26px;
+                gap: 18px;
+                align-items: flex-start;
+                transform: translateY(-130%);  /* Hidden by default */
+                transition: transform 0.25s ease;
+                z-index: 40;
+            }
+
+            /* Show menu when open class is toggled */
+            .navlinks.open {
+                transform: translateY(0);
+            }
+
+            /* Show hamburger button on mobile */
+            .menu-btn {
+                display: block;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;  /* Single column skills */
+            }
+
+            .stat-grid {
+                grid-template-columns: 1fr;  /* Single column stats */
+            }
+
+            section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    HEADER
+    Sticky navigation bar with brand logo and nav links.
+    Includes mobile hamburger menu toggle.
+    ============================================================ -->
+    <header class="site">
+        <div class="wrap">
+            <nav>
+                <!-- Brand logo linking to top of page -->
+                <a href="#top" class="brand">
+                    <span class="dot"></span>Bernard Sagon
+                </a>
+
+                <!-- Navigation links (hidden on mobile, toggled by JS) -->
+                <div class="navlinks" id="navlinks">
+                    <a href="#about">About</a>
+                    <a href="#skills">Skills</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#education">Education</a>
+                    <a href="#contact" class="nav-cta">Get in touch</a>
+                </div>
+
+                <!-- Hamburger menu button (visible only on mobile) -->
+                <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main id="top">
+
+        <!-- ============================================================
+        HERO SECTION
+        First impression: name, role, availability, and a decorative
+        code panel that represents the developer's identity.
+        ============================================================ -->
+        <section class="hero wrap">
+            <!-- Left column: Text introduction -->
+            <div>
+                <!-- Availability badge with animated green pulse dot -->
+                <span class="eyebrow">
+                    <span class="pulse"></span>Open to internship opportunities
+                </span>
+
+                <!-- Main headline with accent color on key phrase -->
+                <h1>Bernard Joseph S. Sagon —<br>Build <span class="accent">website with a passion</span></h1>
+
+                <!-- Supporting description -->
+                <p class="lede">
+                    IT student focused on full-stack web development. I write maintainable
+                    HTML, CSS, JavaScript and PHP, and I care about the details that separate
+                    working code from good code.
+                </p>
+
+                <!-- Call-to-action buttons -->
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">View my work →</a>
+                    <a href="#contact" class="btn btn-ghost">Contact me</a>
+                </div>
+            </div>
+
+            <!-- Right column: Decorative code editor panel -->
+            <div class="code-panel" data-reveal>
+                <!-- Window control bar with traffic light dots -->
+                <div class="bar">
+                    <span></span><span></span><span></span>
+                    <span class="filename">developer.php</span>
+                </div>
+                <!-- Syntax-highlighted PHP code representing the developer -->
+                <pre><span class="tok-cm">&lt;?php</span>
+<span class="tok-kw">class</span> <span class="tok-fn">Developer</span> {
+    <span class="tok-prop">public</span> <span class="tok-var">$name</span>     = <span class="tok-str">"Bernard Joseph S. Sagon"</span>;
+    <span class="tok-prop">public</span> <span class="tok-var">$role</span>     = <span class="tok-str">"IT Student / Web Developer"</span>;
+    <span class="tok-prop">public</span> <span class="tok-var">$stack</span>    = [<span class="tok-str">"HTML"</span>, <span class="tok-str">"CSS"</span>, <span class="tok-str">"JS"</span>, <span class="tok-str">"PHP"</span>];
+    <span class="tok-prop">public</span> <span class="tok-var">$status</span>   = <span class="tok-str">"available_for_internship"</span>;
+
+    <span class="tok-kw">public function</span> <span class="tok-fn">isHireable</span>() {
+        <span class="tok-kw">return</span> <span class="tok-kw">true</span>; <span class="tok-cm">// always</span>
+    }
+}
+<span class="tok-cm">?&gt;</span></pre>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ============================================================
+        ABOUT SECTION
+        Personal background and skill statistics.
+        Uses a two-column grid layout.
+        ============================================================ -->
+        <section id="about" class="wrap">
+            <div class="section-head" data-reveal>
+                <span class="section-tag">// about.md</span>
+                <h2>A student who codes like it's already a career.</h2>
+            </div>
+            <div class="about-grid">
+                <!-- Left: Biography text -->
+                <div data-reveal>
+                    <p>I'm currently studying Information Technology and I enjoy creating websites and applications that solve real problems.</p>
+                    <p>Most of my projects are built using HTML, CSS, JavaScript, PHP and Python.</p>
+                    <p>Outside programming, I enjoy collecting Gundam model kits, exploring new technologies, and continuously learning new programming skills.</p>
+                </div>
+                <!-- Right: Skill statistics in a 2x2 grid -->
+                <div data-reveal>
+                    <div class="stat-grid">
+                        <div class="stat">
+                            <div class="num">HTML/CSS</div>
+                            <div class="label">Semantic, responsive layouts</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num">JS</div>
+                            <div class="label">DOM, fetch, interactivity</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num">PHP</div>
+                            <div class="label">Server-side logic & forms</div>
+                        </div>
+                        <div class="stat">
+                            <div class="num">MySQL</div>
+                            <div class="label">Relational data basics</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ============================================================
+        SKILLS SECTION
+        Three skill categories displayed as cards:
+        Programming Languages, Web Development, and Tools.
+        Each card contains an icon, description, and tag chips.
+        ============================================================ -->
+        <section id="skills" class="wrap">
+            <div class="section-head" data-reveal>
+                <span class="section-tag">// skills</span>
+                <h2>My Skills</h2>
+                <p>These are the programming languages, tools, and technologies I've been learning and using to build my projects.</p>
+            </div>
+            <div class="skills-grid">
+                <!-- Card 1: Programming Languages -->
+                <div class="skill-card" data-reveal>
+                    <div class="icon">&lt;/&gt;</div>
+                    <h3>Programming Languages</h3>
+                    <p>Building websites and applications while continuously improving my coding skills.</p>
+                    <div class="taglist">
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">PHP</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">SQL</span>
+                    </div>
+                </div>
+                <!-- Card 2: Web Development -->
+                <div class="skill-card" data-reveal>
+                    <div class="icon">{ }</div>
+                    <h3>Web Development</h3>
+                    <p>Creating responsive websites with clean layouts, interactive features, and simple backend functionality.</p>
+                    <div class="taglist">
+                        <span class="tag">Responsive Design</span>
+                        <span class="tag">DOM Manipulation</span>
+                        <span class="tag">MySQL</span>
+                        <span class="tag">Forms</span>
+                        <span class="tag">CRUD</span>
+                        <span class="tag">UI Design</span>
+                    </div>
+                </div>
+                <!-- Card 3: Tools -->
+                <div class="skill-card" data-reveal>
+                    <div class="icon">⚙</div>
+                    <h3>Tools I Use</h3>
+                    <p>Software and tools I use for designing, coding, and managing my projects.</p>
+                    <div class="taglist">
+                        <span class="tag">VS Code</span>
+                        <span class="tag">Git</span>
+                        <span class="tag">GitHub</span>
+                        <span class="tag">Figma</span>
+                        <span class="tag">XAMPP</span>
+                        <span class="tag">Canva</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ============================================================
+        PROJECTS SECTION
+        Portfolio showcase in a two-column card grid.
+        Each project is wrapped in an anchor tag linking to the live demo.
+        Cards show a thumbnail area, title, status, description, and tech tags.
+        ============================================================ -->
+        <section id="projects" class="wrap">
+            <div class="section-head" data-reveal>
+                <span class="section-tag">// projects</span>
+                <h2>My Projects</h2>
+                <p>Here are some of the projects I've built while learning web development and programming.</p>
+            </div>
+            <div class="project-grid">
+                <!-- Project 1: Gundam Collection Tracker -->
+                <a href="https://aazil1.github.io/Gundam-Tracker/" target="_blank" class="project-link" rel="noopener noreferrer">
+                    <div class="project-card" data-reveal>
+                        <div class="project-thumb">
+                            <span class="ph-icon">🤖 Gundam Collection</span>
+                        </div>
+                        <div class="project-body">
+                            <div class="row">
+                                <h3>Gundam Collection Tracker</h3>
+                                <span class="status-pill done">Live Demo</span>
+                            </div>
+                            <p>A responsive website that helps users organize their Gundam model kit collection by category, including High Grade (HG), Real Grade (RG), and Master Grade (MG). Users can track owned kits and build a wishlist through a clean and easy-to-use interface.</p>
+                            <div class="taglist">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                            <p class="project-demo">🔗 View Live Website</p>
+                        </div>
+                    </div>
+                </a>
+                <!-- Project 2: Perfume Collection Tracker -->
+                <a href="https://aazil1.github.io/scnt-Perfume-archive/" target="_blank" class="project-link" rel="noopener noreferrer">
+                    <div class="project-card" data-reveal>
+                        <div class="project-thumb">
+                            <span class="ph-icon">🌸 Perfume Collection</span>
+                        </div>
+                        <div class="project-body">
+                            <div class="row">
+                                <h3>Perfume Collection Tracker</h3>
+                                <span class="status-pill done">Live Demo</span>
+                            </div>
+                            <p>A responsive perfume collection website that allows users to organize their fragrances into <strong>Bought</strong> and <strong>Wishlist</strong> categories. Designed with a clean, modern interface to make managing a personal fragrance collection simple and enjoyable.</p>
+                            <div class="taglist">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                            <p class="project-demo">🔗 View Live Website</p>
+                        </div>
+                    </div>
+                </a>
+                <!-- Project 3: Notes Application -->
+                <a href="https://aazil1.github.io/Notes/" target="_blank" class="project-link" rel="noopener noreferrer">
+                    <div class="project-card" data-reveal>
+                        <div class="project-thumb">
+                            <span class="ph-icon">📝 Notes App</span>
+                        </div>
+                        <div class="project-body">
+                            <div class="row">
+                                <h3>Notes Application</h3>
+                                <span class="status-pill done">Live Demo</span>
+                            </div>
+                            <p>A clean and user-friendly notes application that allows users to create, edit, and delete notes for organizing daily tasks, reminders, and ideas. Designed with a simple interface for a smooth note-taking experience.</p>
+                            <div class="taglist">
+                                <span class="tag">HTML</span>
+                                <span class="tag">CSS</span>
+                                <span class="tag">JavaScript</span>
+                            </div>
+                            <p class="project-demo">🔗 View Live Website</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ============================================================
+        EDUCATION SECTION
+        Vertical timeline showing academic journey:
+        College, Senior High, and Self-Learning.
+        Each entry has a date, title, institution, and description.
+        ============================================================ -->
+        <section id="education" class="wrap">
+            <div class="section-head" data-reveal>
+                <span class="section-tag">// education</span>
+                <h2>Education</h2>
+                <p>My academic journey and continuous learning in Information Technology.</p>
+            </div>
+            <div class="timeline" data-reveal>
+                <!-- Entry 1: Current College -->
+                <div class="t-item">
+                    <span class="t-date">2023 - Present</span>
+                    <h3>Bachelor of Science in Information Technology</h3>
+                    <div class="t-org">Global Reciprocal Colleges - Caloocan City</div>
+                    <p>Currently pursuing a degree in Information Technology with a focus on web development, programming, database management, and software development. Continuously building projects to improve my technical and problem-solving skills.</p>
+                </div>
+                <!-- Entry 2: Senior High School -->
+                <div class="t-item">
+                    <span class="t-date">2021 - 2023</span>
+                    <h3>Senior High School</h3>
+                    <div class="t-org">Arellano University - Malabon Campus</div>
+                    <p>Completed senior high school while developing an interest in programming, computer systems, and technology, which inspired me to pursue Information Technology in college.</p>
+                </div>
+                <!-- Entry 3: Self-Learning -->
+                <div class="t-item">
+                    <span class="t-date">2024 - Present</span>
+                    <h3>Self-Learning & Personal Projects</h3>
+                    <div class="t-org">Independent Learning</div>
+                    <p>Outside of school, I continuously improve my skills by creating personal projects such as a Movie Watch List Website, Gundam Collection Tracker, Hobby Kit Ordering System, Perfume Collection Website, Python Weather App, and Tic Tac Toe Game. These projects help me strengthen my knowledge of HTML, CSS, JavaScript, PHP, Python, and SQL.</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <!-- ============================================================
+        CONTACT SECTION
+        Dark-themed call-to-action panel with gradient glow effects.
+        Provides email and GitHub contact options.
+        ============================================================ -->
+        <section id="contact" class="wrap">
+            <div class="contact-panel" data-reveal>
+                <span class="section-tag">// contact</span>
+                <h2>Let's Connect!</h2>
+                <p>Whether you have a project, an internship opportunity, or just want to talk about web development, programming, or technology, I'd be happy to hear from you. Feel free to reach out anytime!</p>
+                <div class="contact-actions">
+                    <!-- Note: Email link corrected to use mailto: protocol -->
+                    <a href="mailto:Bernardsagon0@gmail.com" class="btn btn-on-dark">📧 Email Me</a>
+                    <a href="https://github.com/aazil1" target="_blank" class="btn btn-ghost-dark" rel="noopener noreferrer">💻 GitHub</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ============================================================
+    FOOTER
+    Simple attribution with monospace styling
+    ============================================================ -->
+    <footer>
+        <div class="wrap">
+            <span class="mono">© 2026 Bernard Joseph S. Sagon — built with HTML, CSS & a lot of attention to detail.</span>
+        </div>
+    </footer>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    Contains two main functions:
+    1. Mobile Navigation Toggle - Opens/closes the hamburger menu
+    2. Scroll Reveal Animation - Fades in elements as they enter viewport
+    ============================================================ -->
+    <script>
+        /**
+         * MOBILE NAVIGATION TOGGLE
+         * Toggles the mobile menu open/close state.
+         * Updates aria-expanded for accessibility.
+         * Closes menu when any nav link is clicked.
+         */
+        const menuBtn = document.getElementById('menuBtn');
+        const navlinks = document.getElementById('navlinks');
+
+        // Toggle menu on hamburger button click
+        menuBtn.addEventListener('click', () => {
+            const open = navlinks.classList.toggle('open');
+            menuBtn.setAttribute('aria-expanded', open);  // Update ARIA state for screen readers
+        });
+
+        // Close menu when any navigation link is clicked
+        navlinks.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => {
+                navlinks.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        /**
+         * SCROLL REVEAL ANIMATION
+         * Uses Intersection Observer API to detect when elements
+         * with [data-reveal] attribute enter the viewport.
+         * Adds the 'in' class to trigger CSS fade-in-up animation.
+         * Each element is only observed once (unobserved after triggering).
+         */
+        const items = document.querySelectorAll('[data-reveal]');
+
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('in');    // Trigger animation
+                    io.unobserve(e.target);          // Stop observing (animate only once)
+                }
+            });
+        }, {
+            threshold: 0.15  // Trigger when 15% of element is visible
+        });
+
+        // Start observing all reveal elements
+        items.forEach(i => io.observe(i));
+    </script>
+
+</body>
+</html>
